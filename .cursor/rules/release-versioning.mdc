@@ -1,0 +1,11 @@
+---
+description: How versioning works and where to bump versions
+alwaysApply: true
+---
+### Versioning and releases
+
+- **Single source of truth**: Bump version in [nodeimage/__version__.py](mdc:nodeimage/__version__.py).
+- **Dynamic wiring**: [pyproject.toml](mdc:pyproject.toml) reads `nodeimage.__version__.__version__` via `[tool.setuptools.dynamic]`.
+- **CLI exposure**: Version available as `nodeimage.__version__` when importing the package.
+- **Releasing**: After bumping, build and publish to PyPI as desired. README badges are fetched from PyPI and will reflect the latest release.
+

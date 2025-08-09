@@ -1,0 +1,29 @@
+---
+alwaysApply: true
+description: High-level project structure and main entry points for NodeImage
+---
+### Project structure and entry points
+
+- **Package**: `nodeimage/`
+- **CLI entry point**: `nodeimage:cli` defined in [nodeimage/_cli.py](mdc:nodeimage/_cli.py) and exported via [nodeimage/__init__.py](mdc:nodeimage/__init__.py). Script binding configured in [pyproject.toml](mdc:pyproject.toml) under `[project.scripts]`.
+- **API client**: `Client` in [nodeimage/_client.py](mdc:nodeimage/_client.py), exported in [nodeimage/__init__.py](mdc:nodeimage/__init__.py).
+- **Utilities**: constants and helpers in [nodeimage/_utils.py](mdc:nodeimage/_utils.py) (e.g., `ENV_API_KEY`).
+- **Version**: `__version__` in [nodeimage/__version__.py](mdc:nodeimage/__version__.py); exposed dynamically via [pyproject.toml](mdc:pyproject.toml) `[tool.setuptools.dynamic]`.
+- **Docs**: usage guide in [README.md](mdc:README.md); license in [LICENSE](mdc:LICENSE).
+
+### CLI commands
+
+- **group `cli`** in [nodeimage/_cli.py](mdc:nodeimage/_cli.py)
+  - **debug**: prints env and API key presence
+  - **upload**: `nodeimage upload <path-or-url>`
+  - **list**: `nodeimage list`
+  - **delete**: `nodeimage delete <image_id>` (supports `--yes` confirmation bypass)
+
+### HTTP API surface used by client
+
+- **Base URL**: `https://api.nodeimage.com` (configurable)
+- **Endpoints** (see [nodeimage/_client.py](mdc:nodeimage/_client.py))
+  - `GET /api/v1/list`
+  - `POST /api/upload`
+  - `DELETE /api/v1/delete/{image_id}`
+

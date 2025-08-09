@@ -1,0 +1,54 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools"]
+
+[project]
+name = "nodeimage"
+description = "NodeImage Python CLI Client"
+license = "MIT"
+requires-python = ">=3.9"
+readme = "README.md"
+authors = [{ name = "0x0208v0", email = "0x0208v0@github.com" }]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Archiving",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "click==8.1.8",
+    "httpx==0.28.1",
+    "typing_extensions==4.14.1",
+    "python-dotenv==1.1.1",
+]
+dynamic = ["version"]
+
+
+[project.urls]
+Homepage = "https://github.com/0x0208v0/nodeimage"
+Source = "https://github.com/0x0208v0/nodeimage"
+
+
+[project.scripts]
+nodeimage = "nodeimage:cli"
+
+[tool.setuptools.dynamic]
+version = { attr = "nodeimage.__version__.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nodeimage*"]
+
+[tool.setuptools.package-data]
+nodeimage = ["py.typed"]

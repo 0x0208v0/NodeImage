@@ -1,0 +1,21 @@
+---
+alwaysApply: true
+description: Summary of Ruff configuration to keep edits consistent with repo settings
+---
+### Ruff rules snapshot
+
+See [.ruff.toml](mdc:.ruff.toml). Key points enforced by the repo:
+
+- **Targets**: `target-version = "py313"` (lint baseline), but runtime supports Python ≥3.9 per [pyproject.toml](mdc:pyproject.toml).
+- **Formatting**:
+  - Single quotes, 4-space indent, line length 120
+  - Docstring code formatting enabled
+- **Imports (isort)**:
+  - `from __future__ import annotations` is required and should appear at the top
+  - Force single-line imports, case-sensitive ordering, order-by-type
+- **Lint select/ignore**:
+  - Select: E4, E7, E9, F
+  - Ignore: E402 (allow imports after module doc/config when needed)
+
+When editing code, match these constraints to avoid churn.
+

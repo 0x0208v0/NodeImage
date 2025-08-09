@@ -1,0 +1,27 @@
+---
+globs: nodeimage/_cli.py
+description: Patterns for adding or modifying CLI commands using Click
+---
+### CLI patterns (Click)
+
+- **Group**: `@click.group()` defines `cli` in [nodeimage/_cli.py](mdc:nodeimage/_cli.py). Exposed as `nodeimage` via [pyproject.toml](mdc:pyproject.toml).
+- **API key resolution**:
+  - `--api-key` option or environment variable `NODE_IMAGE_API_KEY`
+  - Falls back to loading `.env` via `python-dotenv` if not present initially
+- **Pre-flight check**: Call `check_api_key(ctx)` at the start of commands that require auth (all except `debug`).
+- **Client usage**: Instantiate `Client(ctx.obj['api_key'])` and call the appropriate method.
+- **Output**: Print JSON to stdout via `json.dumps(result)`.
+- **Confirmations**: Use `@click.confirmation_option` for destructive actions (e.g., `delete`). Provide `--yes` flag for non-interactive usage.
+
+Example skeleton for a new command:
+
+```python
+@cli.command(name='info')
+@click.pass_context
+def info(ctx):
+    check_api_key(ctx)
+    client = Client(ctx.obj['api_key'])
+    result = client.get_images()  # replace with real call
+    click.echo(json.dumps(result))
+```
+

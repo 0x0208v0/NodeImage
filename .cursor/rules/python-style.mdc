@@ -1,0 +1,18 @@
+---
+globs: *.py
+description: Python style, typing, and structure guidance for NodeImage code
+---
+### Python style and typing
+
+- **Imports**: Always include `from __future__ import annotations` at the top of Python modules. Prefer single-line imports and deterministic ordering.
+- **Quoting**: Use single quotes for strings.
+- **Line length**: 120 characters.
+- **Indentation**: 4 spaces.
+- **Typing**: Add explicit type hints for public functions, methods, and returns. Prefer `Path` for filesystem paths.
+- **Names**: Use descriptive, full-word names; avoid 1–2 character identifiers.
+- **Control flow**: Prefer guard clauses and shallow nesting. Handle errors early with clear exception messages.
+- **Logging**: Use a module logger (`logging.getLogger(__name__)`) or an injected logger; do not print from library code.
+- **Compatibility**: For `Self`, fallback to `typing_extensions` when not available (pattern already used in the codebase).
+
+Refer to the project config: [.ruff.toml](mdc:.ruff.toml) for enforced formatting and lint rules.
+

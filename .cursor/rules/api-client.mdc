@@ -1,0 +1,19 @@
+---
+globs: nodeimage/_client.py,nodeimage/_utils.py
+description: Client behavior, endpoints, and helper conventions
+---
+### Client and helpers
+
+- **Base URL**: Default `https://api.nodeimage.com`; override via `Client(base_url=...)`.
+- **Timeouts**: Default `httpx.Timeout(10)`; may pass seconds or `Timeout` instance.
+- **Headers**: Auth header `X-API-Key` with the provided API key.
+- **Endpoints**:
+  - `GET /api/v1/list` → `Client.get_images()`
+  - `POST /api/upload` → `Client.upload_image()`
+  - `DELETE /api/v1/delete/{image_id}` → `Client.delete_image(image_id)`
+- **Upload sources**: If value is an HTTP(S) URL (`is_url`), fetch via `download_image_from_url` and send as file tuple; otherwise, open local path in binary.
+- **Errors**: Non-200 responses raise `ValueError` including status code and body; invalid paths/URLs also raise `ValueError` with a clear message.
+- **Typing**: Use `Self` (fallback to `typing_extensions` if needed) and precise types like `Path`, `Timeout`.
+
+Related files: [nodeimage/_client.py](mdc:nodeimage/_client.py), [nodeimage/_utils.py](mdc:nodeimage/_utils.py).
+
