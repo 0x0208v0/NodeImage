@@ -1,0 +1,32 @@
+---
+globs: tests/**/*.py,**/test_*.py,**/*_test.py,pytest.ini,conftest.py
+description: Testing patterns, pytest configuration, and test conventions
+---
+### Testing patterns and pytest configuration
+
+- **Test framework**: Use pytest as the primary testing framework, configured in [pytest.ini](mdc:pytest.ini).
+- **Test discovery**: Tests are located in the `tests/` directory, following the pattern `test_*.py` or `*_test.py`.
+- **Test structure**: 
+  - Use `conftest.py` for shared fixtures and test configuration
+  - Group related tests in the same file or module
+  - Use descriptive test names that explain what is being tested
+- **Fixtures**: Define reusable test fixtures in [tests/conftest.py](mdc:tests/conftest.py) for common setup like mock clients, API keys, and test data.
+- **Mocking**: Mock external dependencies (HTTP requests, file system operations) to ensure tests are isolated and fast.
+- **Test execution**: Run tests using `uv run pytest` to ensure proper dependency resolution [[memory:5752733]].
+- **Test categories**: 
+  - Unit tests for individual functions and classes
+  - Integration tests for API client interactions
+  - CLI tests for command-line interface behavior
+- **Assertions**: Use pytest's built-in assertions and provide clear error messages.
+- **Test data**: Store test fixtures and sample data in appropriate test directories.
+
+Example test structure:
+```python
+def test_client_upload_success(mock_httpx_post, sample_image_path):
+    client = Client('test_api_key')
+    result = client.upload_image(sample_image_path)
+    assert result['id'] is not None
+    mock_httpx_post.assert_called_once()
+```
+
+Related files: [tests/](mdc:tests/), [pytest.ini](mdc:pytest.ini), [scripts/run_tests.py](mdc:scripts/run_tests.py).

@@ -27,10 +27,11 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = [
-    "click==8.1.8",
-    "httpx==0.28.1",
-    "typing_extensions==4.14.1",
-    "python-dotenv==1.1.1",
+    "click",
+    "httpx[socks]",
+    "typing_extensions",
+    "python-dotenv",
+    "openpyxl",
 ]
 dynamic = ["version"]
 
@@ -52,3 +53,10 @@ include = ["nodeimage*"]
 
 [tool.setuptools.package-data]
 nodeimage = ["py.typed"]
+
+[dependency-groups]
+dev = [
+    "setuptools>=80.9.0",
+    "pytest>=8.4.1",
+    "ruff>=0.12.8",
+]

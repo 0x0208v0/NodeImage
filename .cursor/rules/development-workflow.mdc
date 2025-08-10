@@ -1,0 +1,48 @@
+---
+alwaysApply: true
+description: Development workflow, tooling, and local development practices
+---
+### Development workflow and tooling
+
+- **Package manager**: Use `uv` for all Python operations instead of global python executables [[memory:5752733]].
+  - Run scripts: `uv run python script.py`
+  - Install packages: `uv add package-name`
+  - Run tests: `uv run pytest`
+  - Execute CLI: `uv run nodeimage`
+- **Project structure**: Package code in `nodeimage/`, tests in `tests/`, development scripts in `scripts/`.
+- **Dependencies**: 
+  - Production dependencies in [pyproject.toml](mdc:pyproject.toml) `[project.dependencies]`
+  - Development dependencies in `[dependency-groups]` section
+  - Lock file: [uv.lock](mdc:uv.lock) (committed to repo)
+- **Code quality**:
+  - Linting and formatting: `ruff` configured in [.ruff.toml](mdc:.ruff.toml)
+  - Run checks: `uv run ruff check` and `uv run ruff format`
+  - Type checking: Use built-in type hints with `from __future__ import annotations`
+- **Local development**:
+  - Use `.env` file for local API keys (git-ignored)
+  - Test against local files in `nodeimage_data/` directory
+  - Debug with `nodeimage debug` command to check configuration
+- **Build and release**:
+  - Version management: Single source of truth in [nodeimage/__version__.py](mdc:nodeimage/__version__.py)
+  - Build: `uv build`
+  - Package structure follows PEP 621 standards in [pyproject.toml](mdc:pyproject.toml)
+- **Git workflow**:
+  - Feature branches from main
+  - Keep `.env` files out of version control ([.gitignore](mdc:.gitignore))
+  - Commit lock files and generated files appropriately
+
+Example development commands:
+```bash
+# Setup
+uv sync
+
+# Development
+uv run nodeimage debug
+uv run pytest
+uv run ruff check
+
+# Build
+uv build
+```
+
+Related files: [pyproject.toml](mdc:pyproject.toml), [uv.lock](mdc:uv.lock), [.ruff.toml](mdc:.ruff.toml), [scripts/](mdc:scripts/).
