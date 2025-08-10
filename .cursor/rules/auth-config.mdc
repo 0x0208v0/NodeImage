@@ -1,0 +1,16 @@
+---
+alwaysApply: true
+description: Authentication via environment variables and .env guidance
+---
+### Authentication and configuration
+
+- **Environment variable**: `NODE_IMAGE_API_KEY` (see [nodeimage/_utils.py](mdc:nodeimage/_utils.py)).
+- **.env support**: If the key is not provided, CLI loads `.env` via `python-dotenv`. Example content:
+
+```dotenv
+NODE_IMAGE_API_KEY=your_api_key_here
+```
+
+- **Security**: `.env` is git-ignored (see [.gitignore](mdc:.gitignore)); never commit real API keys.
+- **CLI option**: `--api-key` overrides environment variable. See [nodeimage/_cli.py](mdc:nodeimage/_cli.py).
+
