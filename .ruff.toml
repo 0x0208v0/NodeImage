@@ -1,4 +1,4 @@
-include = ["pyproject.toml", "src/**/*.py", "scripts/**/*.py"]
+include = ["pyproject.toml", "nodeimage/**/*.py", "scripts/**/*.py", "tests/**/*.py"]
 exclude = [
     ".bzr",
     ".direnv",

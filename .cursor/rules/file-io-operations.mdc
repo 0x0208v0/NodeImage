@@ -1,0 +1,62 @@
+---
+globs: nodeimage/_utils.py,nodeimage/_cli.py,nodeimage/_client.py
+description: File I/O operations, path handling, and image processing patterns
+---
+### File I/O operations and path handling
+
+- **Path handling**: Use `pathlib.Path` for all file system operations instead of string paths.
+  - Type hints: `str | Path` for parameters that accept both
+  - Validation: Use `is_path()`, `is_file()` helper functions from [nodeimage/_utils.py](mdc:nodeimage/_utils.py)
+  - Path resolution: Convert to `Path` objects early in functions
+- **Image file detection**: 
+  - Use `is_image_file()` to validate file extensions
+  - Supported formats defined in `IMAGE_EXTENSIONS` constant
+  - Check both file existence and format before processing
+- **File traversal**:
+  - Use `iter_files_in_path()` for recursive directory scanning
+  - Handle both individual files and directories uniformly
+  - Skip non-existent paths gracefully
+- **URL vs local path handling**:
+  - Use `is_url()` to distinguish between URLs and local paths
+  - Download remote images with `download_image_from_url()`
+  - Handle both sources in upload operations transparently
+- **File I/O patterns**:
+  - Always use context managers (`with open()`) for file operations
+  - Specify encoding explicitly for text files (`encoding='utf-8'`)
+  - Use binary mode (`'rb'`) for image files
+  - Handle file not found and permission errors gracefully
+- **Export operations**:
+  - CSV export: Use `csv.DictWriter` with proper field ordering
+  - Excel export: Use `openpyxl` with auto-sizing columns
+  - JSON export: Use `json.dumps()` with `ensure_ascii=False` for Chinese text
+  - File overwrite confirmation before writing
+- **Data structures**:
+  - Use `@dataclass` for structured data like `ImageInfo`
+  - Include type hints for all fields
+  - Provide clear field names and purposes
+- **Content type detection**:
+  - Use `mimetypes.guess_extension()` for file extension from content type
+  - Provide fallbacks for unknown types (`.jpg` default)
+  - Handle missing or malformed content type headers
+
+Example patterns:
+```python
+# Path validation and conversion
+def process_path(path: str | Path) -> Path:
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError(f'Path not found: {p}')
+    return p
+
+# File iteration with filtering
+for file_path in iter_files_in_path(directory):
+    if is_image_file(file_path):
+        process_image(file_path)
+
+# Safe file writing with confirmation
+if is_path(output_file):
+    if not click.confirm(f'文件 {output_file} 已存在，是否覆盖？'):
+        return
+```
+
+Related files: [nodeimage/_utils.py](mdc:nodeimage/_utils.py), [nodeimage/_cli.py](mdc:nodeimage/_cli.py), [nodeimage/_client.py](mdc:nodeimage/_client.py).

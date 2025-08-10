@@ -1,0 +1,43 @@
+---
+globs: nodeimage/_cli.py
+description: Bilingual support patterns for Chinese and English user interfaces
+---
+### Bilingual support and message conventions
+
+- **Language policy**: Support both Chinese and English, with Chinese as the primary user-facing language for CLI messages and help text.
+- **Message constants**: Define all user-facing text as constants at the top of [nodeimage/_cli.py](mdc:nodeimage/_cli.py):
+  - Help text: `CLI_HELP`, `UPLOAD_HELP`, `DELETE_HELP`, etc.
+  - Examples: `UPLOAD_EXAMPLES`, `DELETE_EXAMPLES`, etc. 
+  - Option descriptions: `API_KEY_HELP`, `FORMAT_HELP`, etc.
+- **Help text format**: Use `\\n\\n\\b` for proper line breaks in Click help output, ensuring examples are displayed correctly [[memory:5744017]].
+- **Message structure**:
+  - Primary messages in Chinese for better user experience
+  - Technical terms and API references in English when appropriate
+  - Error messages should be clear and actionable in Chinese
+  - Include both success and error states in Chinese
+- **CLI output patterns**:
+  - Progress messages: `正在上传第 {i}/{total} 张图片: {filename}`
+  - Success messages: Use `click.style(text, fg='green')` for positive feedback
+  - Error messages: Use `click.style(text, fg='red')` for errors
+  - Status indicators: `已配置` (configured), `未配置` (not configured)
+- **Consistency**:
+  - Use consistent terminology across all commands
+  - Maintain the same tone and style in all user-facing text
+  - Keep technical details in English (URLs, API keys, file paths)
+- **Comments**: Write code comments concisely in English without emojis [[memory:5744938]].
+
+Example bilingual patterns:
+```python
+# Constants for help text
+UPLOAD_HELP = f"""上传本地文件、网络URL或文件夹中的图片\\n
+{UPLOAD_EXAMPLES}"""
+
+# Status messages
+click.echo(click.style('成功: ', fg='green') + f'{item}')
+click.echo(click.style('错误: ', fg='red') + f'未设置 API Key')
+
+# Progress indicators  
+click.echo(f'[{i}/{len(items)}] 上传: {item}')
+```
+
+Related files: [nodeimage/_cli.py](mdc:nodeimage/_cli.py).

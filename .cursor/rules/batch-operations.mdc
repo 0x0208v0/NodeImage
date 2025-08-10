@@ -1,0 +1,52 @@
+---
+globs: nodeimage/_cli.py
+description: Batch operations, CLI interaction patterns, and pipeline support
+---
+### Batch operations and CLI interaction patterns
+
+- **Batch operation framework**: Use `execute_batch_operation()` function for consistent handling of multiple items:
+  - Continues processing on individual failures
+  - Collects results and errors separately  
+  - Provides progress indicators during processing
+  - Returns structured summary with counts and details
+- **Input collection patterns**:
+  - Command line arguments: Direct list of items
+  - File input: `--file` option with `read_image_ids_from_file()`
+  - Pipeline input: Auto-detect `sys.stdin.isatty()` for pipe operations
+  - Use `collect_image_ids()` helper for unified input handling
+- **Pipeline support**: 
+  - Commands support Unix pipeline operations (`|`)
+  - Pipeline input requires `--yes` flag to skip confirmations [[memory:5744017]]
+  - Error handling: Show clear message when `--yes` is missing with pipeline
+  - Example: `nodeimage list | nodeimage delete --yes`
+- **Confirmation patterns**:
+  - Destructive operations require explicit confirmation
+  - Use `click.confirm()` for interactive confirmation
+  - Provide `--yes` flag to bypass confirmations
+  - Special handling for delete operations (double confirmation)
+- **Progress reporting**:
+  - Show current item and total count: `[{i}/{total}] 操作: {item}`
+  - Use colored output for success/failure feedback
+  - Display summary at completion with `display_batch_summary()`
+- **File format support**:
+  - Input files: Support comments (`#` prefix) and multiple delimiters
+  - Extract first column from CSV/TSV format with `get_first_column()`
+  - Skip empty lines and comment lines automatically
+- **Output formats**:
+  - Multiple export formats: `id`, `json`, `csv`, `xlsx`
+  - Structured data extraction with `_extract_image_data()`
+  - File output with overwrite confirmation
+
+Example batch operation:
+```python
+def upload_image(ctx, images: list, yes: bool):
+    all_images = collect_image_paths(images)
+    if not yes:
+        # Show confirmation with item list
+        if not click.confirm('确认继续上传吗？'):
+            return
+    summary = execute_batch_operation(all_images, client.upload_image, '上传')
+    display_batch_summary(summary, '上传')
+```
+
+Related files: [nodeimage/_cli.py](mdc:nodeimage/_cli.py).

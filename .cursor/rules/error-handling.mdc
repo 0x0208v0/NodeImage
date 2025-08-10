@@ -1,0 +1,52 @@
+---
+globs: *.py
+description: Error handling patterns, exception conventions, and user-friendly error messages
+---
+### Error handling and exception patterns
+
+- **Exception types**: Use appropriate built-in exceptions:
+  - `ValueError` for invalid inputs, malformed URLs, bad API responses
+  - `FileNotFoundError` for missing files (or check with `is_path()` first)
+  - `Exception` as catch-all for unexpected errors in CLI batch operations
+- **Error messages**: Provide clear, actionable error messages in both English and Chinese [[memory:5744938]].
+  - Include context: what operation failed, what was expected, what was received
+  - For API errors: include status code and response body
+  - For file operations: include file path and specific issue
+- **CLI error handling**:
+  - Use `click.echo(..., err=True)` for error output to stderr
+  - Use `ctx.exit(1)` to terminate with proper exit code
+  - Color error messages with `click.style(text, fg='red')` for visibility
+  - Provide helpful suggestions when possible
+- **Client error handling**:
+  - HTTP errors: Include status code and response text in exception message
+  - Network timeouts: Allow configurable timeout values
+  - Invalid inputs: Validate early and provide specific error messages
+- **Batch operation errors**:
+  - Continue processing remaining items when one fails
+  - Collect and report all errors at the end
+  - Use `execute_batch_operation()` pattern for consistent error handling
+- **Logging vs user messages**:
+  - Use logger for debugging information
+  - Use `click.echo()` for user-facing messages
+  - Never use `print()` in library code [[memory:5744938]]
+
+Example error handling patterns:
+```python
+# API client error
+if response.status_code != 200:
+    raise ValueError(f'Request failed status_code={response.status_code}, body={response.text}')
+
+# CLI input validation
+if not all_image_ids:
+    click.echo('错误: 没有找到有效的图片ID', err=True)
+    ctx.exit(1)
+
+# File operation error
+try:
+    with open(file_path, 'r') as f:
+        content = f.read()
+except Exception as e:
+    raise Exception(f'无法读取文件 {file_path}: {e}')
+```
+
+Related files: [nodeimage/_client.py](mdc:nodeimage/_client.py), [nodeimage/_cli.py](mdc:nodeimage/_cli.py), [nodeimage/_utils.py](mdc:nodeimage/_utils.py).
